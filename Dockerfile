@@ -1,14 +1,14 @@
 FROM buildpack-deps
 
-RUN apt-get update
-RUN apt-get install -y wget && apt-get install -y flex
+RUN apt-get update && apt-get install -y flex wget
 
-RUN mkdir /usr/src/gcc
-RUN mkdir /usr/src/gcc/objdir
+RUN mkdir -p /usr/src/gcc/objdir
 ADD . /usr/src/gcc/srcdir
 
 WORKDIR /usr/src/gcc/srcdir
-RUN /usr/src/gcc/srcdir/contrib/download_prerequisites
+RUN ./contrib/download_prerequisites
 
 WORKDIR /usr/src/gcc/objdir
-RUN /usr/src/gcc/srcdir/configure --disable-multilib --enable-languages=c,c++ && make -j$(($(nproc)-1)) && make install
+RUN ../srcdir/configure --disable-multilib --enable-languages=c,c++ \
+	&& make -j$(nproc) \
+	&& make install
