@@ -26,7 +26,7 @@ RUN apt-get update \
 	&& rm gcc.tar.bz2* \
 	&& cd /usr/src/gcc \
 	&& ./contrib/download_prerequisites \
-	&& rm *.tar.* \
+	&& { rm *.tar.* || true; } \
 	&& dir="$(mktemp -d)" \
 	&& cd "$dir" \
 	&& /usr/src/gcc/configure \
@@ -36,5 +36,4 @@ RUN apt-get update \
 	&& make install-strip \
 	&& cd .. \
 	&& rm -rf "$dir" \
-	&& apt-get purge -y curl gcc g++ wget \
-	&& apt-get autoremove -y
+	&& apt-get autoremove -y curl gcc g++ wget
