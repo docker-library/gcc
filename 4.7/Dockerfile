@@ -34,4 +34,4 @@ RUN apt-get update \
 	&& make install-strip \
 	&& cd .. \
 	&& rm -rf "$dir" \
-	&& apt-get autoremove -y curl gcc g++ wget
+	&& apt-get purge -y --auto-remove curl gcc g++ wget
