@@ -9,7 +9,7 @@ RUN gpg --keyserver pgp.mit.edu --recv-key \
 	7F74F97C103468EE5D750B583AB00996FC26A641 \
 	33C235A34C46AA3FFB293709A328C3A2C3C45C06
 
-ENV GCC_VERSION 4.8.3
+ENV GCC_VERSION 4.8.4
 
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
 # but then leaves the tarballs themselves lying around
