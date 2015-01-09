@@ -1,7 +1,7 @@
 FROM buildpack-deps:wheezy
 
 # https://gcc.gnu.org/mirrors.html
-RUN gpg --keyserver pgp.mit.edu --recv-key \
+RUN gpg --keyserver pool.sks-keyservers.net --recv-key \
 	B215C1633BCA0477615F1B35A5B3A004745C015A \
 	B3C42148A44E6983B3E4CC0793FA9B1AB75C61B8 \
 	90AA470469D3965A87A5DCB494D03953902C9419 \
