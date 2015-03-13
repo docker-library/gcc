@@ -40,4 +40,4 @@ RUN apt-get update \
 RUN update-alternatives --remove cc /usr/bin/gcc \
 	&& unlink /usr/bin/gcc \
 	&& unlink /usr/bin/g++ \
-    && update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100
+	&& update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100
