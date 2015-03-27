@@ -34,4 +34,10 @@ RUN apt-get update \
 	&& make install-strip \
 	&& cd .. \
 	&& rm -rf "$dir" \
-	&& apt-get purge -y --auto-remove curl gcc g++ wget
+	&& apt-get purge -y --auto-remove curl wget
+
+# ensure that alternatives are pointing to the new compiler and that old one is no longer used
+RUN update-alternatives --remove cc /usr/bin/gcc \
+	&& unlink /usr/bin/gcc \
+	&& unlink /usr/bin/g++ \
+	&& update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100
