@@ -13,8 +13,9 @@ ENV GCC_VERSION 4.9.2
 
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
 # but then leaves the tarballs themselves lying around
-RUN apt-get update \
-	&& apt-get install -y curl flex wget \
+RUN buildDeps='flex' \
+	&& set -x \
+	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
 	&& rm -r /var/lib/apt/lists/* \
 	&& curl -SL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
 	&& curl -SL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig \
@@ -34,10 +35,10 @@ RUN apt-get update \
 	&& make install-strip \
 	&& cd .. \
 	&& rm -rf "$dir" \
-	&& apt-get purge -y --auto-remove curl wget
+	&& apt-get purge -y --auto-remove $buildDeps
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
-RUN update-alternatives --remove cc /usr/bin/gcc \
-	&& unlink /usr/bin/gcc \
-	&& unlink /usr/bin/g++ \
-	&& update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100
+RUN set -x \
+	&& dpkg-divert --divert /usr/bin/gcc.orig --rename /usr/bin/gcc \
+	&& dpkg-divert --divert /usr/bin/g++.orig --rename /usr/bin/g++ \
+	&& update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 999
