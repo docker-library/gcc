@@ -20,7 +20,9 @@ for version in "${versions[@]}"; do
 	versionAliases=( $fullVersion $version ${aliases[$version]} )
 	
 	echo
+	grep -m1 '^# Last Modified: ' "$version/Dockerfile"
 	for va in "${versionAliases[@]}"; do
 		echo "$va: ${url}@${commit} $version"
 	done
+	grep -m1 '^# Docker EOL: ' "$version/Dockerfile"
 done
