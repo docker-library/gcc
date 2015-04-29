@@ -33,12 +33,14 @@ for version in "${versions[@]}"; do
 	if [ $releaseAge -gt $eolAge ]; then
 		eols+=( "$version ($fullVersion)" )
 	fi
+	eolDate="$(date -d "$lastModified + $eolPeriod" +"$dateFormat")"
 	
 	(
 		set -x
 		sed -ri '
 			s/^(ENV GCC_VERSION) .*/\1 '"$fullVersion"'/;
 			s/^(# Last Modified:) .*/\1 '"$lastModified"'/;
+			s/^(# Docker EOL:) .*/\1 '"$eolDate"'/;
 		' "$version/Dockerfile"
 	)
 done
