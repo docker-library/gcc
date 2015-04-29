@@ -13,7 +13,7 @@ RUN set -xe \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-# Last Modified: 2014-Jun-12 14:36:11
+# Last Modified: 2014-06-12
 ENV GCC_VERSION 4.7.4
 
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
