@@ -43,6 +43,10 @@ RUN buildDeps='flex' \
 	&& rm -rf "$dir" \
 	&& apt-get purge -y --auto-remove $buildDeps
 
+# gcc installs .so files in /usr/local/lib64...
+RUN echo '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
+	&& ldconfig -v
+
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
 RUN set -x \
 	&& dpkg-divert --divert /usr/bin/gcc.orig --rename /usr/bin/gcc \
