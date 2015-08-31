@@ -12,7 +12,7 @@ versions=( "${versions[@]%/}" )
 #packagesUrl='http://ftpmirror.gnu.org/gcc/'
 packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page changes based on which mirror we end up hitting, so let's hit a specific one for now... :'(
 packages="$(echo "$packagesUrl" | sed -r 's/[^a-zA-Z.-]+/-/g')"
-curl -sSL "$packagesUrl" > "$packages"
+curl -fsSL "$packagesUrl" > "$packages"
 
 # our own "supported" window is 2 years because upstream doesn't have a good guideline, but appears to only release maintenance updates for 2-3 years
 export TZ=UTC
