@@ -15,7 +15,7 @@ RUN set -xe \
 
 # Last Modified: 2015-07-16
 ENV GCC_VERSION 5.2.0
-# Docker EOL: 2017-07-16
+# Docker EOL: 2016-07-16
 
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
 # but then leaves the tarballs themselves lying around
