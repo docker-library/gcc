@@ -23,11 +23,11 @@ RUN buildDeps='flex' \
 	&& set -x \
 	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
 	&& rm -r /var/lib/apt/lists/* \
-	&& curl -SL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
-	&& curl -SL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig \
+	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
+	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig \
 	&& gpg --verify gcc.tar.bz2.sig \
 	&& mkdir -p /usr/src/gcc \
-	&& tar -xvf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1 \
+	&& tar -xf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1 \
 	&& rm gcc.tar.bz2* \
 	&& cd /usr/src/gcc \
 	&& ./contrib/download_prerequisites \
