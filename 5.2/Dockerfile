@@ -1,4 +1,4 @@
-FROM buildpack-deps:wheezy
+FROM buildpack-deps:jessie
 
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
