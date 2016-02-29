@@ -25,7 +25,7 @@ RUN buildDeps='flex' \
 	&& rm -r /var/lib/apt/lists/* \
 	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
 	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig \
-	&& gpg --verify gcc.tar.bz2.sig \
+	&& gpg --batch --verify gcc.tar.bz2.sig gcc.tar.bz2 \
 	&& mkdir -p /usr/src/gcc \
 	&& tar -xf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1 \
 	&& rm gcc.tar.bz2* \
