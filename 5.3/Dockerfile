@@ -36,7 +36,7 @@ RUN buildDeps='flex' \
 	&& cd "$dir" \
 	&& /usr/src/gcc/configure \
 		--disable-multilib \
-		--enable-languages=c,c++,go \
+		--enable-languages=c,c++,fortran,go \
 	&& make -j"$(nproc)" \
 	&& make install-strip \
 	&& cd .. \
@@ -51,4 +51,5 @@ RUN echo '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
 RUN set -x \
 	&& dpkg-divert --divert /usr/bin/gcc.orig --rename /usr/bin/gcc \
 	&& dpkg-divert --divert /usr/bin/g++.orig --rename /usr/bin/g++ \
+	&& dpkg-divert --divert /usr/bin/gfortran.orig --rename /usr/bin/gfortran \
 	&& update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 999
