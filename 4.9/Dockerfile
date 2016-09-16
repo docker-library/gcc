@@ -13,9 +13,9 @@ RUN set -xe \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-# Last Modified: 2015-12-04
-ENV GCC_VERSION 5.3.0
-# Docker EOL: 2016-12-04
+# Last Modified: 2016-08-03
+ENV GCC_VERSION 4.9.4
+# Docker EOL: 2017-08-03
 
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
 # but then leaves the tarballs themselves lying around

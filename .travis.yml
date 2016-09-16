@@ -2,8 +2,9 @@ language: bash
 services: docker
 
 env:
-  - VERSION=6.1
-  - VERSION=5.3
+  - VERSION=6
+  - VERSION=5
+  - VERSION=4.9
 
 install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images

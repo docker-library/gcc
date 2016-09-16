@@ -3,8 +3,7 @@ set -e
 
 declare -A aliases=(
 	[4.9]='4'
-	[5.3]='5'
-	[6.1]='6 latest'
+	[6]='latest'
 )
 
 self="$(basename "$BASH_SOURCE")"
@@ -56,12 +55,16 @@ for version in "${versions[@]}"; do
 	dockerfile="$(git show "$commit":"$version/Dockerfile")"
 	fullVersion="$(echo "$dockerfile" | awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }')"
 
-	versionAliases=(
-		$fullVersion
+	versionAliases=()
+	while [ "$fullVersion" != "$version" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
+		versionAliases+=( $fullVersion )
+		fullVersion="${fullVersion%[.-]*}"
+	done
+	versionAliases+=(
 		$version
 		${aliases[$version]:-}
 	)
-	
+
 	echo
 	echo "$dockerfile" | grep -m1 '^# Last Modified: '
 	cat <<-EOE
