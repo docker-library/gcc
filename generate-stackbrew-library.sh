@@ -3,7 +3,7 @@ set -e
 
 declare -A aliases=(
 	[4.9]='4'
-	[6]='latest'
+	[7]='latest'
 )
 
 self="$(basename "$BASH_SOURCE")"
