@@ -17,11 +17,13 @@ RUN set -xe \
 ENV GCC_VERSION 4.9.4
 # Docker EOL: 2017-08-03
 
-# "download_prerequisites" pulls down a bunch of tarballs and extracts them,
-# but then leaves the tarballs themselves lying around
-RUN buildDeps='flex' \
-	&& set -x \
-	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+RUN set -ex \
+	&& buildDeps=' \
+		dpkg-dev \
+		flex \
+	' \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends $buildDeps \
 	&& rm -r /var/lib/apt/lists/* \
 	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
 	&& curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig \
@@ -30,11 +32,18 @@ RUN buildDeps='flex' \
 	&& tar -xf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1 \
 	&& rm gcc.tar.bz2* \
 	&& cd /usr/src/gcc \
+# "download_prerequisites" pulls down a bunch of tarballs and extracts them,
+# but then leaves the tarballs themselves lying around
 	&& ./contrib/download_prerequisites \
 	&& { rm *.tar.* || true; } \
+# explicitly update autoconf config.guess and config.sub so they support more arches/libcs
+	&& wget -O config.guess "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" \
+	&& wget -O config.sub "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD" \
 	&& dir="$(mktemp -d)" \
 	&& cd "$dir" \
+	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 	&& /usr/src/gcc/configure \
+		--build="$gnuArch" \
 		--disable-multilib \
 		--enable-languages=c,c++,fortran,go \
 	&& make -j"$(nproc)" \
