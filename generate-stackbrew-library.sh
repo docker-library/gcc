@@ -34,6 +34,22 @@ dirCommit() {
 	)
 }
 
+getArches() {
+	local repo="$1"; shift
+	local officialImagesUrl='https://github.com/docker-library/official-images/raw/master/library/'
+
+	eval "declare -A -g parentRepoToArches=( $(
+		find -name 'Dockerfile' -exec awk '
+				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|microsoft\/[^:]+)(:|$)/ {
+					print "'"$officialImagesUrl"'" $2
+				}
+			' '{}' + \
+			| sort -u \
+			| xargs bashbrew cat --format '[{{ .RepoName }}:{{ .TagName }}]="{{ join " " .TagEntry.Architectures }}"'
+	) )"
+}
+getArches 'gcc'
+
 cat <<-EOH
 # this file is generated via https://github.com/docker-library/gcc/blob/$(fileCommit "$self")/$self
 
@@ -51,6 +67,8 @@ join() {
 
 for version in "${versions[@]}"; do
 	commit="$(dirCommit "$version")"
+	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/Dockerfile")"
+	arches="${parentRepoToArches[$parent]}"
 
 	dockerfile="$(git show "$commit":"$version/Dockerfile")"
 	fullVersion="$(echo "$dockerfile" | awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }')"
@@ -69,6 +87,7 @@ for version in "${versions[@]}"; do
 	echo "$dockerfile" | grep -m1 '^# Last Modified: '
 	cat <<-EOE
 		Tags: $(join ', ' "${versionAliases[@]}")
+		Architectures: $(join ', ' $arches)
 		GitCommit: $commit
 		Directory: $version
 	EOE
