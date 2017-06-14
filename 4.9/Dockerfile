@@ -1,5 +1,15 @@
 FROM buildpack-deps:jessie
 
+RUN set -ex; \
+	if ! command -v gpg > /dev/null; then \
+		apt-get update; \
+		apt-get install -y --no-install-recommends \
+			gnupg2 \
+			dirmngr \
+		; \
+		rm -rf /var/lib/apt/lists/*; \
+	fi
+
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
 	B215C1633BCA0477615F1B35A5B3A004745C015A \

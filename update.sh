@@ -1,5 +1,12 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
+
+defaultDebianSuite='stretch'
+declare -A debianSuites=(
+	[4.9]='jessie'
+	[5]='jessie'
+	[6]='jessie'
+)
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
@@ -28,24 +35,28 @@ dateFormat='%Y-%m-%d'
 travisEnv=
 for version in "${versions[@]}"; do
 	travisEnv='\n  - VERSION='"$version$travisEnv"
-	
+
 	fullVersion="$(grep '<a href="gcc-'"$version." "$packages" | sed -r 's!.*<a href="gcc-([^"/]+)/?".*!\1!' | sort -V | tail -1)"
 	lastModified="$(grep -m1 '<a href="gcc-'"$fullVersion"'/"' "$packages" | awk -F '  +' '{ print $2 }')"
 	lastModified="$(date -d "$lastModified" +"$dateFormat")"
-	
+
 	releaseAge="$(( $today - $(date +'%s' -d "$lastModified") ))"
 	if [ $releaseAge -gt $eolAge ]; then
 		eols+=( "$version ($fullVersion)" )
 	fi
 	eolDate="$(date -d "$lastModified + $eolPeriod" +"$dateFormat")"
-	
+
+	debianSuite="${debianSuites[$version]:-$defaultDebianSuite}"
+
 	(
 		set -x
-		sed -ri '
-			s/^(ENV GCC_VERSION) .*/\1 '"$fullVersion"'/;
-			s/^(# Last Modified:) .*/\1 '"$lastModified"'/;
-			s/^(# Docker EOL:) .*/\1 '"$eolDate"'/;
-		' "$version/Dockerfile"
+		sed -r \
+			-e 's!%%SUITE%%!'"$debianSuite"'!g' \
+			-e 's!^(ENV GCC_VERSION) .*!\1 '"$fullVersion"'!' \
+			-e 's!^(# Last Modified:) .*!\1 '"$lastModified"'!' \
+			-e 's!^(# Docker EOL:) .*!\1 '"$eolDate"'!' \
+			Dockerfile.template \
+			> "$version/Dockerfile"
 	)
 done
 
