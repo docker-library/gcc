@@ -1,4 +1,4 @@
-FROM buildpack-deps:jessie
+FROM buildpack-deps:%%SUITE%%
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -29,9 +29,9 @@ RUN set -ex; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-# Last Modified: 2016-06-03
-ENV GCC_VERSION 5.4.0
-# Docker EOL: 2017-06-03
+# Last Modified: placeholder
+ENV GCC_VERSION placeholder
+# Docker EOL: placeholder
 
 RUN set -ex; \
 	buildDeps=' \
