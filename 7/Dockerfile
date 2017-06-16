@@ -67,13 +67,42 @@ RUN set -ex; \
 	dir="$(mktemp -d)"; \
 	cd "$dir"; \
 	\
+	extraConfigureArgs=''; \
+	dpkgArch="$(dpkg --print-architecture)"; \
+	case "$dpkgArch" in \
+# with-arch: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules2?revision=9450&view=markup#l491
+# with-float: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules.defs?revision=9487&view=markup#l416
+# with-mode: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules.defs?revision=9487&view=markup#l376
+		armel) \
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv4t --with-float=soft" \
+# TODO get enough builders to test and verify arm32v5 O:)
+			;; \
+		armhf) \
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb" \
+# TODO make[2]: *** No rule to make target '/usr/src/gcc/gcc/sync-builtinsndef', needed by 'tree-ssa-loop-prefetch.o'.  Stop.
+# (which the builds takes _forever_ to get to)
+			;; \
+		\
+# with-arch-32: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules2?revision=9450&view=markup#l590
+		i386) \
+			osVersionID="$(set -e; . /etc/os-release; echo "$VERSION_ID")"; \
+			case "$osVersionID" in \
+				8) extraConfigureArgs="$extraConfigureArgs --with-arch-32=i586" ;; \
+				*) extraConfigureArgs="$extraConfigureArgs --with-arch-32=i686" ;; \
+			esac; \
+# TODO for some reason, libgo + i386 fails on https://github.com/gcc-mirror/gcc/blob/gcc-7_1_0-release/libgo/runtime/proc.c#L154
+# "error unknown case for SETCONTEXT_CLOBBERS_TLS"
+			;; \
+	esac; \
+	\
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	/usr/src/gcc/configure \
 		--build="$gnuArch" \
 		--disable-multilib \
 		--enable-languages=c,c++,fortran,go \
+		$extraConfigureArgs \
 	; \
-	make -j"$(nproc)"; \
+	make -j "$(nproc)"; \
 	make install-strip; \
 	\
 	cd ..; \
