@@ -43,12 +43,12 @@ RUN set -ex; \
 	apt-get install -y --no-install-recommends $buildDeps; \
 	rm -r /var/lib/apt/lists/*; \
 	\
-	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2; \
-	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig; \
-	gpg --batch --verify gcc.tar.bz2.sig gcc.tar.bz2; \
+	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.%%TARBALL-COMPRESSION%%" -o gcc.tar.%%TARBALL-COMPRESSION%%; \
+	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.%%TARBALL-COMPRESSION%%.sig" -o gcc.tar.%%TARBALL-COMPRESSION%%.sig; \
+	gpg --batch --verify gcc.tar.%%TARBALL-COMPRESSION%%.sig gcc.tar.%%TARBALL-COMPRESSION%%; \
 	mkdir -p /usr/src/gcc; \
-	tar -xf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1; \
-	rm gcc.tar.bz2*; \
+	tar -xf gcc.tar.%%TARBALL-COMPRESSION%% -C /usr/src/gcc --strip-components=1; \
+	rm gcc.tar.%%TARBALL-COMPRESSION%%*; \
 	\
 	cd /usr/src/gcc; \
 	\

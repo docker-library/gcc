@@ -48,6 +48,18 @@ for version in "${versions[@]}"; do
 
 	debianSuite="${debianSuites[$version]:-$defaultDebianSuite}"
 
+	compression=
+	for tryCompression in xz bz2 gz; do
+		if wget --quiet --spider "http://ftpmirror.gnu.org/gcc/gcc-$fullVersion/gcc-$fullVersion.tar.$tryCompression"; then
+			compression="$tryCompression"
+			break
+		fi
+	done
+	if [ -z "$compression" ]; then
+		echo >&2 "error: $fullVersion does not seem to even really exist"
+		exit 1
+	fi
+
 	(
 		set -x
 		sed -r \
@@ -55,6 +67,7 @@ for version in "${versions[@]}"; do
 			-e 's!^(ENV GCC_VERSION) .*!\1 '"$fullVersion"'!' \
 			-e 's!^(# Last Modified:) .*!\1 '"$lastModified"'!' \
 			-e 's!^(# Docker EOL:) .*!\1 '"$eolDate"'!' \
+			-e 's!%%TARBALL-COMPRESSION%%!'"$compression"'!g' \
 			Dockerfile.template \
 			> "$version/Dockerfile"
 	)
