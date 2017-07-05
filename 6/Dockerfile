@@ -29,9 +29,9 @@ RUN set -ex; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-# Last Modified: 2016-12-21
-ENV GCC_VERSION 6.3.0
-# Docker EOL: 2017-12-21
+# Last Modified: 2017-07-04
+ENV GCC_VERSION 6.4.0
+# Docker EOL: 2018-07-04
 
 RUN set -ex; \
 	\
@@ -43,12 +43,12 @@ RUN set -ex; \
 	apt-get install -y --no-install-recommends $buildDeps; \
 	rm -r /var/lib/apt/lists/*; \
 	\
-	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2; \
-	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2.sig" -o gcc.tar.bz2.sig; \
-	gpg --batch --verify gcc.tar.bz2.sig gcc.tar.bz2; \
+	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" -o gcc.tar.xz; \
+	curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" -o gcc.tar.xz.sig; \
+	gpg --batch --verify gcc.tar.xz.sig gcc.tar.xz; \
 	mkdir -p /usr/src/gcc; \
-	tar -xf gcc.tar.bz2 -C /usr/src/gcc --strip-components=1; \
-	rm gcc.tar.bz2*; \
+	tar -xf gcc.tar.xz -C /usr/src/gcc --strip-components=1; \
+	rm gcc.tar.xz*; \
 	\
 	cd /usr/src/gcc; \
 	\
