@@ -68,9 +68,8 @@ join() {
 for version in "${versions[@]}"; do
 	commit="$(dirCommit "$version")"
 	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/Dockerfile")"
-	# no arm32 for now: https://github.com/docker-library/gcc/issues/37
 	# no i386 for now: https://github.com/docker-library/gcc/issues/38
-	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ (arm32v[^ ]+|i386)//g')"
+	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ i386//g')"
 
 	dockerfile="$(git show "$commit":"$version/Dockerfile")"
 	fullVersion="$(echo "$dockerfile" | awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }')"

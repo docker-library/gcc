@@ -75,12 +75,9 @@ RUN set -ex; \
 # with-mode: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules.defs?revision=9487&view=markup#l376
 		armel) \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv4t --with-float=soft" \
-# TODO get enough builders to test and verify arm32v5 O:)
 			;; \
 		armhf) \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb" \
-# TODO make[2]: *** No rule to make target '/usr/src/gcc/gcc/sync-builtinsndef', needed by 'tree-ssa-loop-prefetch.o'.  Stop.
-# (which the builds takes _forever_ to get to)
 			;; \
 		\
 # with-arch-32: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules2?revision=9450&view=markup#l590
