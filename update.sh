@@ -3,8 +3,6 @@ set -Eeuo pipefail
 
 defaultDebianSuite='stretch'
 declare -A debianSuites=(
-	[4.9]='jessie'
-	[5]='jessie'
 	[6]='jessie'
 )
 
