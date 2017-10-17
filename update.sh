@@ -4,6 +4,7 @@ set -Eeuo pipefail
 defaultDebianSuite='stretch'
 declare -A debianSuites=(
 	[6]='jessie'
+	[5]='jessie'
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
