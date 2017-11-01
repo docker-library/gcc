@@ -4,7 +4,7 @@ RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
 		apt-get update; \
 		apt-get install -y --no-install-recommends \
-			gnupg2 \
+			gnupg \
 			dirmngr \
 		; \
 		rm -rf /var/lib/apt/lists/*; \
