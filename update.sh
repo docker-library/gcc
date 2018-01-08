@@ -49,7 +49,7 @@ for version in "${versions[@]}"; do
 
 	compression=
 	for tryCompression in xz bz2 gz; do
-		if wget --quiet --spider "http://ftpmirror.gnu.org/gcc/gcc-$fullVersion/gcc-$fullVersion.tar.$tryCompression"; then
+		if wget --quiet --spider "$packagesUrl/gcc-$fullVersion/gcc-$fullVersion.tar.$tryCompression"; then
 			compression="$tryCompression"
 			break
 		fi
