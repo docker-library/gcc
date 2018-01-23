@@ -15,7 +15,7 @@ if [ ${#versions[@]} -eq 0 ]; then
 fi
 versions=( "${versions[@]%/}" )
 
-#packagesUrl='http://ftpmirror.gnu.org/gcc/'
+#packagesUrl='https://ftpmirror.gnu.org/gcc/'
 packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page changes based on which mirror we end up hitting, so let's hit a specific one for now... :'(
 packages="$(echo "$packagesUrl" | sed -r 's/[^a-zA-Z.-]+/-/g')"
 curl -fsSL "$packagesUrl" > "$packages"
