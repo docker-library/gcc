@@ -29,9 +29,9 @@ RUN set -ex; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
-# Last Modified: 2017-08-14
-ENV GCC_VERSION 7.2.0
-# Docker EOL: 2018-08-14
+# Last Modified: 2018-01-25
+ENV GCC_VERSION 7.3.0
+# Docker EOL: 2019-01-25
 
 RUN set -ex; \
 	\
