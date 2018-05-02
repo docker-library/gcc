@@ -1,4 +1,4 @@
-FROM buildpack-deps:jessie
+FROM buildpack-deps:stretch
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -37,9 +37,9 @@ ENV GCC_MIRRORS \
 		https://mirrors.concertpass.com/gcc/releases \
 		http://www.netgull.com/gcc/releases
 
-# Last Modified: 2017-07-04
-ENV GCC_VERSION 6.4.0
-# Docker EOL: 2018-07-04
+# Last Modified: 2018-05-02
+ENV GCC_VERSION 8.1.0
+# Docker EOL: 2019-05-02
 
 RUN set -ex; \
 	\
