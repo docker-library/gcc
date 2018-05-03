@@ -59,17 +59,16 @@ for version in "${versions[@]}"; do
 		exit 1
 	fi
 
-	(
-		set -x
-		sed -r \
-			-e 's!%%SUITE%%!'"$debianSuite"'!g' \
-			-e 's!^(ENV GCC_VERSION) .*!\1 '"$fullVersion"'!' \
-			-e 's!^(# Last Modified:) .*!\1 '"$lastModified"'!' \
-			-e 's!^(# Docker EOL:) .*!\1 '"$eolDate"'!' \
-			-e 's!%%TARBALL-COMPRESSION%%!'"$compression"'!g' \
-			Dockerfile.template \
-			> "$version/Dockerfile"
-	)
+	echo "$version: $fullVersion ($lastModified vs $eolDate); $debianSuite, $compression"
+
+	sed -r \
+		-e 's!%%SUITE%%!'"$debianSuite"'!g' \
+		-e 's!^(ENV GCC_VERSION) .*!\1 '"$fullVersion"'!' \
+		-e 's!^(# Last Modified:) .*!\1 '"$lastModified"'!' \
+		-e 's!^(# Docker EOL:) .*!\1 '"$eolDate"'!' \
+		-e 's!%%TARBALL-COMPRESSION%%!'"$compression"'!g' \
+		Dockerfile.template \
+		> "$version/Dockerfile"
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"

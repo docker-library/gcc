@@ -29,22 +29,42 @@ RUN set -ex; \
 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
+# https://gcc.gnu.org/mirrors.html
+ENV GCC_MIRRORS \
+		https://ftpmirror.gnu.org/gcc \
+		https://bigsearcher.com/mirrors/gcc/releases \
+		https://mirrors-usa.go-parts.com/gcc/releases \
+		https://mirrors.concertpass.com/gcc/releases \
+		http://www.netgull.com/gcc/releases
+
 # Last Modified: 2017-10-10
 ENV GCC_VERSION 5.5.0
 # Docker EOL: 2018-10-10
 
 RUN set -ex; \
 	\
-	buildDeps=' \
+	savedAptMark="$(apt-mark showmanual)"; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
 		dpkg-dev \
 		flex \
-	'; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends $buildDeps; \
+	; \
 	rm -r /var/lib/apt/lists/*; \
 	\
-	curl -fSL "https://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" -o gcc.tar.xz; \
-	curl -fSL "https://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" -o gcc.tar.xz.sig; \
+	_fetch() { \
+		local fetch="$1"; shift; \
+		local file="$1"; shift; \
+		for mirror in $GCC_MIRRORS; do \
+			if curl -fL "$mirror/$fetch" -o "$file"; then \
+				return 0; \
+			fi; \
+		done; \
+		echo >&2 "error: failed to download '$fetch' from several mirrors"; \
+		return 1; \
+	}; \
+	\
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" 'gcc.tar.xz.sig'; \
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" 'gcc.tar.xz'; \
 	gpg --batch --verify gcc.tar.xz.sig gcc.tar.xz; \
 	mkdir -p /usr/src/gcc; \
 	tar -xf gcc.tar.xz -C /usr/src/gcc --strip-components=1; \
@@ -106,7 +126,9 @@ RUN set -ex; \
 	\
 	rm -rf "$dir"; \
 	\
-	apt-get purge -y --auto-remove $buildDeps
+	apt-mark auto '.*' > /dev/null; \
+	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
 # gcc installs .so files in /usr/local/lib64...
 RUN set -ex; \
