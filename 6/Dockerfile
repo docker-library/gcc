@@ -37,9 +37,9 @@ ENV GCC_MIRRORS \
 		https://mirrors.concertpass.com/gcc/releases \
 		http://www.netgull.com/gcc/releases
 
-# Last Modified: 2017-07-04
-ENV GCC_VERSION 6.4.0
-# Docker EOL: 2018-07-04
+# Last Modified: 2018-10-26
+ENV GCC_VERSION 6.5.0
+# Docker EOL: 2019-10-26
 
 RUN set -ex; \
 	\
@@ -63,8 +63,11 @@ RUN set -ex; \
 		return 1; \
 	}; \
 	\
-	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" 'gcc.tar.xz.sig'; \
-	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" 'gcc.tar.xz'; \
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" 'gcc.tar.xz.sig' \
+# 6.5.0 (https://mirrors.kernel.org/gnu/gcc/6.5.0/), no gcc- prefix
+		|| _fetch "$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig"; \
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" 'gcc.tar.xz' \
+		|| _fetch "$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" 'gcc.tar.xz'; \
 	gpg --batch --verify gcc.tar.xz.sig gcc.tar.xz; \
 	mkdir -p /usr/src/gcc; \
 	tar -xf gcc.tar.xz -C /usr/src/gcc --strip-components=1; \
