@@ -35,8 +35,8 @@ travisEnv=
 for version in "${versions[@]}"; do
 	travisEnv='\n  - VERSION='"$version$travisEnv"
 
-	fullVersion="$(grep '<a href="gcc-'"$version." "$packages" | sed -r 's!.*<a href="gcc-([^"/]+)/?".*!\1!' | sort -V | tail -1)"
-	lastModified="$(grep -m1 '<a href="gcc-'"$fullVersion"'/"' "$packages" | awk -F '  +' '{ print $2 }')"
+	fullVersion="$(grep -E '<a href="(gcc-)?'"$version." "$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
+	lastModified="$(grep -Em1 '<a href="(gcc-)?'"$fullVersion"'/"' "$packages" | awk -F '  +' '{ print $2 }')"
 	lastModified="$(date -d "$lastModified" +"$dateFormat")"
 
 	releaseAge="$(( $today - $(date +'%s' -d "$lastModified") ))"
@@ -49,7 +49,10 @@ for version in "${versions[@]}"; do
 
 	compression=
 	for tryCompression in xz bz2 gz; do
-		if wget --quiet --spider "$packagesUrl/gcc-$fullVersion/gcc-$fullVersion.tar.$tryCompression"; then
+		if \
+			wget --quiet --spider "$packagesUrl/gcc-$fullVersion/gcc-$fullVersion.tar.$tryCompression" \
+			|| wget --quiet --spider "$packagesUrl/$fullVersion/gcc-$fullVersion.tar.$tryCompression" \
+		; then
 			compression="$tryCompression"
 			break
 		fi
