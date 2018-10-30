@@ -20,10 +20,10 @@ packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page 
 packages="$(echo "$packagesUrl" | sed -r 's/[^a-zA-Z.-]+/-/g')"
 curl -fsSL "$packagesUrl" > "$packages"
 
-# our own "supported" window is 1 year from the most recent release because upstream doesn't have a good guideline, but appears to only release maintenance updates for 2-3 years after the initial release
-# in addition, maintenance releases are _usually_ less than a year apart; from 4.7+ there's only one outlier, and it's 4.7.3->4.7.4 at ~14 months
+# our own "supported" window is 18 months from the most recent release because upstream doesn't have a good guideline, but appears to only release maintenance updates for 2-3 years after the initial release
+# in addition, maintenance releases are _usually_ less than a year apart; from 4.7+ there's a handful of outliers, like 4.7.3->4.7.4 at ~14 months, 6.4->6.5 at ~15 months, etc
 export TZ=UTC
-eolPeriod='1 year'
+eolPeriod='18 months'
 today="$(date +'%s')"
 eolAgo="$(date +'%s' -d "$(date -d "@$today") - $eolPeriod")"
 eolAge="$(( $today - $eolAgo ))"

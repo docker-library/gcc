@@ -39,7 +39,7 @@ ENV GCC_MIRRORS \
 
 # Last Modified: 2018-10-30
 ENV GCC_VERSION 6.5.0
-# Docker EOL: 2019-10-30
+# Docker EOL: 2020-04-30
 
 RUN set -ex; \
 	\
