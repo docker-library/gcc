@@ -37,9 +37,9 @@ ENV GCC_MIRRORS \
 		https://mirrors.concertpass.com/gcc/releases \
 		http://www.netgull.com/gcc/releases
 
-# Last Modified: 2018-10-26
+# Last Modified: 2018-10-30
 ENV GCC_VERSION 6.5.0
-# Docker EOL: 2019-10-26
+# Docker EOL: 2019-10-30
 
 RUN set -ex; \
 	\
