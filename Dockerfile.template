@@ -26,7 +26,7 @@ ENV GPG_KEYS \
 	33C235A34C46AA3FFB293709A328C3A2C3C45C06
 RUN set -ex; \
 	for key in $GPG_KEYS; do \
-		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+		gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	done
 
 # https://gcc.gnu.org/mirrors.html
