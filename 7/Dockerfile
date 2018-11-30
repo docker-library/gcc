@@ -127,7 +127,7 @@ RUN set -ex; \
 	\
 	cd ..; \
 	\
-	rm -rf "$dir"; \
+	rm -rf "$dir" /usr/src/gcc; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
