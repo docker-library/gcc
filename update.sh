@@ -1,7 +1,7 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-defaultDebianSuite='stretch'
+defaultDebianSuite='buster'
 declare -A debianSuites=(
 	[6]='jessie'
 	[5]='jessie'
