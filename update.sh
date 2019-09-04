@@ -31,10 +31,7 @@ eols=()
 
 dateFormat='%Y-%m-%d'
 
-travisEnv=
 for version in "${versions[@]}"; do
-	travisEnv='\n  - VERSION='"$version$travisEnv"
-
 	fullVersion="$(grep -E '<a href="(gcc-)?'"$version." "$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
 	lastModified="$(grep -Em1 '<a href="(gcc-)?'"$fullVersion"'/"' "$packages" | awk -F '  +' '{ print $2 }')"
 	lastModified="$(date -d "$lastModified" +"$dateFormat")"
@@ -73,9 +70,6 @@ for version in "${versions[@]}"; do
 		Dockerfile.template \
 		> "$version/Dockerfile"
 done
-
-travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
-echo "$travis" > .travis.yml
 
 if [ ${#eols[@]} -gt 0 ]; then
 	{
