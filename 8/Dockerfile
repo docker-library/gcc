@@ -7,7 +7,14 @@ RUN set -ex; \
 			gnupg \
 			dirmngr \
 		; \
-		rm -rf /var/lib/apt/lists/*; \
+		apt-get clean; \
+		rm -rf \
+			/var/lib/apt/lists/* \
+			/tmp/* \
+        		/var/tmp/* \
+        		/usr/share/man \
+        		/usr/share/doc \
+        		/usr/share/doc-base; \
 	fi
 
 # https://gcc.gnu.org/mirrors.html
@@ -49,7 +56,14 @@ RUN set -ex; \
 		dpkg-dev \
 		flex \
 	; \
-	rm -r /var/lib/apt/lists/*; \
+	apt-get clean; \
+	rm -rf \
+		/var/lib/apt/lists/* \
+		/tmp/* \
+        	/var/tmp/* \
+        	/usr/share/man \
+        	/usr/share/doc \
+        	/usr/share/doc-base; \
 	\
 	_fetch() { \
 		local fetch="$1"; shift; \
