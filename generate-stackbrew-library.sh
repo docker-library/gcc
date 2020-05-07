@@ -66,12 +66,9 @@ join() {
 
 for version in "${versions[@]}"; do
 	commit="$(dirCommit "$version")"
-	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/Dockerfile")"
-	# no i386 for now: https://github.com/docker-library/gcc/issues/38
-	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ i386//g')"
 
 	dockerfile="$(git show "$commit":"$version/Dockerfile")"
-	fullVersion="$(echo "$dockerfile" | awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }')"
+	fullVersion="$(awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }' <<<"$dockerfile")"
 
 	versionAliases=()
 	while [ "$fullVersion" != "$version" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
@@ -83,13 +80,17 @@ for version in "${versions[@]}"; do
 		${aliases[$version]:-}
 	)
 
+	parent="$(awk 'toupper($1) == "FROM" { print $2 }' <<<"$dockerfile")"
+	# no i386 for now: https://github.com/docker-library/gcc/issues/38
+	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ i386 / /g')"
+
 	echo
-	echo "$dockerfile" | grep -m1 '^# Last Modified: '
+	grep -m1 '^# Last Modified: ' <<<"$dockerfile"
 	cat <<-EOE
 		Tags: $(join ', ' "${versionAliases[@]}")
 		Architectures: $(join ', ' $arches)
 		GitCommit: $commit
 		Directory: $version
 	EOE
-	echo "$dockerfile" | grep -m1 '^# Docker EOL: '
+	grep -m1 '^# Docker EOL: ' <<<"$dockerfile"
 done
