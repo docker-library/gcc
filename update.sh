@@ -16,8 +16,7 @@ versions=( "${versions[@]%/}" )
 
 #packagesUrl='https://ftpmirror.gnu.org/gcc/'
 packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page changes based on which mirror we end up hitting, so let's hit a specific one for now... :'(
-packages="$(echo "$packagesUrl" | sed -r 's/[^a-zA-Z.-]+/-/g')"
-curl -fsSL "$packagesUrl" > "$packages"
+packages="$(wget -qO- "$packagesUrl")"
 
 # our own "supported" window is 18 months from the most recent release because upstream doesn't have a good guideline, but appears to only release maintenance updates for 2-3 years after the initial release
 # in addition, maintenance releases are _usually_ less than a year apart; from 4.7+ there's a handful of outliers, like 4.7.3->4.7.4 at ~14 months, 6.4->6.5 at ~15 months, etc
@@ -31,8 +30,8 @@ eols=()
 dateFormat='%Y-%m-%d'
 
 for version in "${versions[@]}"; do
-	fullVersion="$(grep -E '<a href="(gcc-)?'"$version." "$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
-	lastModified="$(grep -Em1 '<a href="(gcc-)?'"$fullVersion"'/"' "$packages" | awk -F '  +' '{ print $2 }')"
+	fullVersion="$(grep -E '<a href="(gcc-)?'"$version." <<<"$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
+	lastModified="$(grep -Em1 '<a href="(gcc-)?'"$fullVersion"'/"' <<<"$packages" | awk -F '  +' '{ print $2 }')"
 	lastModified="$(date -d "$lastModified" +"$dateFormat")"
 
 	releaseAge="$(( $today - $(date +'%s' -d "$lastModified") ))"
@@ -85,5 +84,3 @@ if [ ${#eols[@]} -gt 0 ]; then
 		echo
 	} >&2
 fi
-
-rm "$packages"
