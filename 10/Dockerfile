@@ -39,9 +39,9 @@ ENV GCC_MIRRORS \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
-# Last Modified: 2020-05-07
-ENV GCC_VERSION 10.1.0
-# Docker EOL: 2021-11-07
+# Last Modified: 2020-07-23
+ENV GCC_VERSION 10.2.0
+# Docker EOL: 2022-01-23
 
 RUN set -ex; \
 	\
