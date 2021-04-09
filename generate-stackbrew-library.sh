@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 declare -A aliases=(
 	[10]='latest'
@@ -8,11 +8,13 @@ declare -A aliases=(
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-versions=( */ )
-versions=( "${versions[@]%/}" )
+if [ "$#" -eq 0 ]; then
+	versions="$(jq -r 'keys | map(@sh) | join(" ")' versions.json)"
+	eval "set -- $versions"
+fi
 
 # sort version numbers with highest first
-IFS=$'\n'; versions=( $(echo "${versions[*]}" | sort -rV) ); unset IFS
+IFS=$'\n'; set -- $(sort -rV <<<"$*"); unset IFS
 
 # get the most recent commit which modified any of "$@"
 fileCommit() {
@@ -40,7 +42,7 @@ getArches() {
 	local repo="$1"; shift
 	local officialImagesUrl='https://github.com/docker-library/official-images/raw/master/library/'
 
-	eval "declare -A -g parentRepoToArches=( $(
+	eval "declare -g -A parentRepoToArches=( $(
 		find -name 'Dockerfile' -exec awk '
 				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|.*\/.*)(:|$)/ {
 					print "'"$officialImagesUrl"'" $2
@@ -67,11 +69,10 @@ join() {
 	echo "${out#$sep}"
 }
 
-for version in "${versions[@]}"; do
-	commit="$(dirCommit "$version")"
+for version; do
+	export version
 
-	dockerfile="$(git show "$commit":"$version/Dockerfile")"
-	fullVersion="$(awk '$1 == "ENV" && $2 == "GCC_VERSION" { print $3; exit }' <<<"$dockerfile")"
+	fullVersion="$(jq -r '.[env.version].version' versions.json)"
 
 	versionAliases=()
 	while [ "$fullVersion" != "$version" -a "${fullVersion%[.-]*}" != "$fullVersion" ]; do
@@ -83,18 +84,20 @@ for version in "${versions[@]}"; do
 		${aliases[$version]:-}
 	)
 
-	parent="$(awk 'toupper($1) == "FROM" { print $2 }' <<<"$dockerfile")"
+	commit="$(dirCommit "$version")"
+
+	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/Dockerfile")"
 	# no i386 for now: https://github.com/docker-library/gcc/issues/38
 	# no mips64le for now: https://github.com/docker-library/gcc/issues/67
 	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ i386 / /g' -e 's/ mips64le / /g')"
 
 	echo
-	grep -m1 '^# Last Modified: ' <<<"$dockerfile"
+	jq -r '"# Last Modified: " + .[env.version].lastModified' versions.json
 	cat <<-EOE
 		Tags: $(join ', ' "${versionAliases[@]}")
 		Architectures: $(join ', ' $arches)
 		GitCommit: $commit
 		Directory: $version
 	EOE
-	grep -m1 '^# Docker EOL: ' <<<"$dockerfile"
+	jq -r '"# Docker EOL: " + .[env.version].eol' versions.json
 done
