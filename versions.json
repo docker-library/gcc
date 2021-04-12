@@ -1,0 +1,23 @@
+{
+  "10": {
+    "compression": "xz",
+    "debian": "buster",
+    "eol": "2022-10-08",
+    "lastModified": "2021-04-08",
+    "version": "10.3.0"
+  },
+  "8": {
+    "compression": "xz",
+    "debian": "buster",
+    "eol": "2021-09-04",
+    "lastModified": "2020-03-04",
+    "version": "8.4.0"
+  },
+  "9": {
+    "compression": "xz",
+    "debian": "buster",
+    "eol": "2021-09-12",
+    "lastModified": "2020-03-12",
+    "version": "9.3.0"
+  }
+}

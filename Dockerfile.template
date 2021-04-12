@@ -1,4 +1,4 @@
-FROM buildpack-deps:%%SUITE%%
+FROM buildpack-deps:{{ .debian }}
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -39,9 +39,9 @@ ENV GCC_MIRRORS \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
-# Last Modified: placeholder
-ENV GCC_VERSION placeholder
-# Docker EOL: placeholder
+# Last Modified: {{ .lastModified }}
+ENV GCC_VERSION {{ .version }}
+# Docker EOL: {{ .eol }}
 
 RUN set -ex; \
 	\
@@ -65,12 +65,12 @@ RUN set -ex; \
 		return 1; \
 	}; \
 	\
-	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.%%TARBALL-COMPRESSION%%.sig" 'gcc.tar.%%TARBALL-COMPRESSION%%.sig'; \
-	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.%%TARBALL-COMPRESSION%%" 'gcc.tar.%%TARBALL-COMPRESSION%%'; \
-	gpg --batch --verify gcc.tar.%%TARBALL-COMPRESSION%%.sig gcc.tar.%%TARBALL-COMPRESSION%%; \
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.{{ .compression }}.sig" 'gcc.tar.{{ .compression }}.sig'; \
+	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.{{ .compression }}" 'gcc.tar.{{ .compression }}'; \
+	gpg --batch --verify gcc.tar.{{ .compression }}.sig gcc.tar.{{ .compression }}; \
 	mkdir -p /usr/src/gcc; \
-	tar -xf gcc.tar.%%TARBALL-COMPRESSION%% -C /usr/src/gcc --strip-components=1; \
-	rm gcc.tar.%%TARBALL-COMPRESSION%%*; \
+	tar -xf gcc.tar.{{ .compression }} -C /usr/src/gcc --strip-components=1; \
+	rm gcc.tar.{{ .compression }}*; \
 	\
 	cd /usr/src/gcc; \
 	\
