@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:buster
+FROM buildpack-deps:bullseye
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -48,9 +48,9 @@ ENV GCC_MIRRORS \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
-# Last Modified: 2021-04-08
-ENV GCC_VERSION 10.3.0
-# Docker EOL: 2022-10-08
+# Last Modified: 2021-04-27
+ENV GCC_VERSION 11.1.0
+# Docker EOL: 2022-10-27
 
 RUN set -ex; \
 	\
