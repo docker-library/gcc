@@ -29,7 +29,10 @@ ENV GPG_KEYS \
 # 2048R/FC26A641 2005-09-13 Richard Guenther <richard.guenther@gmail.com>
 	7F74F97C103468EE5D750B583AB00996FC26A641 \
 # 1024D/C3C45C06 2004-04-21 Jakub Jelinek <jakub@redhat.com>
-	33C235A34C46AA3FFB293709A328C3A2C3C45C06
+	33C235A34C46AA3FFB293709A328C3A2C3C45C06 \
+# 4096R/09B5FA62 2020-05-28 Jakub Jelinek <jakub@redhat.com>
+	D3A93CAD751C2AF4F8C7AD516C35B99309B5FA62
+
 RUN set -ex; \
 	for key in $GPG_KEYS; do \
 		gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \

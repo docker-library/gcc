@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 defaultDebianSuite='buster'
 declare -A debianSuites=(
-	#[6]='jessie'
+	[11]='bullseye' # https://github.com/docker-library/gcc/pull/74#issuecomment-828768704
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
