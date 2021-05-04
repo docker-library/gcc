@@ -135,9 +135,10 @@ RUN set -ex; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
-# gcc installs .so files in /usr/local/lib64...
+# gcc installs .so files in /usr/local/lib64 (and /usr/local/lib)...
 RUN set -ex; \
-	echo '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf; \
+# this filename needs to sort higher than all the architecture filenames ("aarch64-...", "armeabi...", etc)
+	{ echo '/usr/local/lib64'; echo '/usr/local/lib'; } > /etc/ld.so.conf.d/000-local-lib.conf; \
 	ldconfig -v
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
