@@ -35,7 +35,7 @@ ENV GPG_KEYS \
 
 RUN set -ex; \
 	for key in $GPG_KEYS; do \
-		gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
 	done
 
 # https://gcc.gnu.org/mirrors.html
