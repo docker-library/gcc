@@ -7,7 +7,7 @@ jqt='.jq-template.awk'
 if [ -n "${BASHBREW_SCRIPTS:-}" ]; then
 	jqt="$BASHBREW_SCRIPTS/jq-template.awk"
 elif [ "$BASH_SOURCE" -nt "$jqt" ]; then
-	wget -qO "$jqt" 'https://github.com/docker-library/bashbrew/raw/ac3e8e9541cb362a579b05bec41dd40d1df1c6e6/scripts/jq-template.awk'
+	curl -sL -o "$jqt" 'https://github.com/docker-library/bashbrew/raw/ac3e8e9541cb362a579b05bec41dd40d1df1c6e6/scripts/jq-template.awk'
 fi
 
 if [ "$#" -eq 0 ]; then
