@@ -79,7 +79,7 @@ RUN set -ex; \
 	\
 # "download_prerequisites" pulls down a bunch of tarballs and extracts them,
 # but then leaves the tarballs themselves lying around
-	./contrib/download_prerequisites; \
+	sed -i 's/ftp/http/g' ./contrib/download_prerequisites; sed -i 's/curl -LO -u anonymous:/curl -LO/g' ./contrib/download_prerequisites; ./contrib/download_prerequisites; \
 	{ rm *.tar.* || true; }; \
 	\
 # explicitly update autoconf config.guess and config.sub so they support more arches/libcs
