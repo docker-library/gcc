@@ -9,9 +9,9 @@
   "11": {
     "compression": "xz",
     "debian": "bullseye",
-    "eol": "2023-01-28",
-    "lastModified": "2021-07-28",
-    "version": "11.2.0"
+    "eol": "2023-10-21",
+    "lastModified": "2022-04-21",
+    "version": "11.3.0"
   },
   "8": {
     "compression": "xz",
