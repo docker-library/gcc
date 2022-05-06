@@ -13,6 +13,13 @@
     "lastModified": "2022-04-21",
     "version": "11.3.0"
   },
+  "12": {
+    "compression": "xz",
+    "debian": "bullseye",
+    "eol": "2023-11-06",
+    "lastModified": "2022-05-06",
+    "version": "12.1.0"
+  },
   "8": {
     "compression": "xz",
     "debian": "buster",
