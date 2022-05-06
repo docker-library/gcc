@@ -101,25 +101,20 @@ RUN set -ex; \
 	extraConfigureArgs=''; \
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "$dpkgArch" in \
-# with-arch: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules2?revision=9450&view=markup#l491
-# with-float: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules.defs?revision=9487&view=markup#l416
-# with-mode: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules.defs?revision=9487&view=markup#l376
+# with-arch: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L462-502
+# with-float: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules.defs#L502-512
+# with-mode: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules.defs#L480
 		armel) \
-			extraConfigureArgs="$extraConfigureArgs --with-arch=armv4t --with-float=soft" \
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv5te --with-float=soft" \
 			;; \
 		armhf) \
-			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb" \
+			# https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1939379/comments/2
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a+fp --with-float=hard --with-mode=thumb" \
 			;; \
 		\
-# with-arch-32: https://anonscm.debian.org/viewvc/gcccvs/branches/sid/gcc-6/debian/rules2?revision=9450&view=markup#l590
+# with-arch-32: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L598
 		i386) \
-			osVersionID="$(set -e; . /etc/os-release; echo "$VERSION_ID")"; \
-			case "$osVersionID" in \
-				8) extraConfigureArgs="$extraConfigureArgs --with-arch-32=i586" ;; \
-				*) extraConfigureArgs="$extraConfigureArgs --with-arch-32=i686" ;; \
-			esac; \
-# TODO for some reason, libgo + i386 fails on https://github.com/gcc-mirror/gcc/blob/gcc-7_1_0-release/libgo/runtime/proc.c#L154
-# "error unknown case for SETCONTEXT_CLOBBERS_TLS"
+			extraConfigureArgs="$extraConfigureArgs --with-arch-32=i686"; \
 			;; \
 	esac; \
 	\

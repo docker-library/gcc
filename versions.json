@@ -20,13 +20,6 @@
     "lastModified": "2022-05-06",
     "version": "12.1.0"
   },
-  "8": {
-    "compression": "xz",
-    "debian": "buster",
-    "eol": "2022-11-14",
-    "lastModified": "2021-05-14",
-    "version": "8.5.0"
-  },
   "9": {
     "compression": "xz",
     "debian": "buster",
