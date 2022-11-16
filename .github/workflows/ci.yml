@@ -19,13 +19,11 @@ jobs:
       strategy: ${{ steps.generate-jobs.outputs.strategy }}
     steps:
       - uses: actions/checkout@v3
+      - uses: docker-library/bashbrew@HEAD
       - id: generate-jobs
         name: Generate Jobs
         run: |
-          git clone --depth 1 https://github.com/docker-library/bashbrew.git -b master ~/bashbrew
-          strategy="$(~/bashbrew/scripts/github-actions/generate.sh)"
-          # if we're FROM jessie, include a ulimit so apt-get isn't slow (https://bugs.launchpad.net/bugs/1332440)
-          strategy="$(jq -c '.matrix.include = [ .matrix.include[] | if .meta.froms[] | test("jessie") then .runs.build |= gsub("docker build"; "docker build --ulimit nofile=1024:1024") else . end ]' <<<"$strategy")"
+          strategy="$("$BASHBREW_SCRIPTS/github-actions/generate.sh")"
           echo "strategy=$strategy" >> "$GITHUB_OUTPUT"
           jq . <<<"$strategy" # sanity check / debugging aid
 
