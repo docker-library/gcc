@@ -14,7 +14,7 @@ For outstanding `gcc` image PRs, check [PRs with the "library/gcc" label on the 
 
 ---
 
--	[![build status badge](https://img.shields.io/github/workflow/status/docker-library/gcc/GitHub%20CI/master?label=GitHub%20CI)](https://github.com/docker-library/gcc/actions?query=workflow%3A%22GitHub+CI%22+branch%3Amaster)
+-	[![build status badge](https://img.shields.io/github/actions/workflow/status/docker-library/gcc/ci.yml?branch=master&label=GitHub%20CI)](https://github.com/docker-library/gcc/actions?query=workflow%3A%22GitHub+CI%22+branch%3Amaster)
 -	[![build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/update.sh/job/gcc.svg?label=Automated%20update.sh)](https://doi-janky.infosiftr.net/job/update.sh/job/gcc/)
 
 | Build | Status | Badges | (per-arch) |
