@@ -1,28 +1,45 @@
 {
   "10": {
     "compression": "xz",
-    "debian": "buster",
+    "debian": {
+      "version": "bullseye"
+    },
     "eol": "2023-12-28",
     "lastModified": "2022-06-28",
     "version": "10.4.0"
   },
   "11": {
     "compression": "xz",
-    "debian": "bullseye",
+    "debian": {
+      "version": "bullseye"
+    },
     "eol": "2023-10-21",
     "lastModified": "2022-04-21",
     "version": "11.3.0"
   },
   "12": {
     "compression": "xz",
-    "debian": "bullseye",
+    "debian": {
+      "version": "bullseye"
+    },
     "eol": "2024-02-19",
     "lastModified": "2022-08-19",
     "version": "12.2.0"
   },
+  "13": {
+    "compression": "xz",
+    "debian": {
+      "version": "bookworm"
+    },
+    "eol": "2024-10-26",
+    "lastModified": "2023-04-26",
+    "version": "13.1.0"
+  },
   "9": {
     "compression": "xz",
-    "debian": "buster",
+    "debian": {
+      "version": "bullseye"
+    },
     "eol": "2023-11-27",
     "lastModified": "2022-05-27",
     "version": "9.5.0"

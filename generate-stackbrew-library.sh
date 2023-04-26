@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 declare -A aliases=(
-	[12]='latest'
+	[13]='latest'
 )
 
 self="$(basename "$BASH_SOURCE")"
@@ -84,7 +84,7 @@ for version; do
 		${aliases[$version]:-}
 	)
 
-	variant="$(jq -r '.[env.version].debian' versions.json)"
+	variant="$(jq -r '.[env.version].debian.version' versions.json)"
 	versionAliases+=( "${versionAliases[@]/%/-$variant}" )
 	versionAliases=( "${versionAliases[@]//latest-/}" )
 

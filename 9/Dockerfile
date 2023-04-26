@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:buster
+FROM buildpack-deps:bullseye
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
