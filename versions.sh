@@ -1,10 +1,9 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-defaultDebianSuite='buster'
+# defaultDebianSuite gets auto-declared below
 declare -A debianSuites=(
-	[11]='bullseye' # https://github.com/docker-library/gcc/pull/74#issuecomment-828768704
-	[12]='bullseye'
+	[13]='bookworm' # TODO after bookworm is actually released, remove this special case
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
@@ -17,6 +16,11 @@ else
 	json="$(< versions.json)"
 fi
 versions=( "${versions[@]%/}" )
+
+debianStable="$(wget -qO- 'http://deb.debian.org/debian/dists/stable/Release' | grep -F 'Codename:')"
+debianStable="$(awk <<<"$debianStable" '$1 == "Codename:" { print $2; exit }')"
+[ -n "$debianStable" ]
+defaultDebianSuite="$debianStable"
 
 #packagesUrl='https://ftpmirror.gnu.org/gcc/'
 packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page changes based on which mirror we end up hitting, so let's hit a specific one for now... :'(
@@ -70,8 +74,10 @@ for version in "${versions[@]}"; do
 			version: env.fullVersion,
 			lastModified: env.lastModified,
 			eol: env.eolDate,
-			debian: env.debianSuite,
 			compression: env.compression,
+			debian: {
+				version: env.debianSuite,
+			},
 		}
 	')"
 done

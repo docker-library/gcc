@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye
+FROM buildpack-deps:bookworm
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -48,9 +48,9 @@ ENV GCC_MIRRORS \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
-# Last Modified: 2022-06-28
-ENV GCC_VERSION 10.4.0
-# Docker EOL: 2023-12-28
+# Last Modified: 2023-04-26
+ENV GCC_VERSION 13.1.0
+# Docker EOL: 2024-10-26
 
 RUN set -ex; \
 	\
@@ -108,7 +108,8 @@ RUN set -ex; \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv5te --with-float=soft" \
 			;; \
 		armhf) \
-			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb" \
+			# https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1939379/comments/2
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a+fp --with-float=hard --with-mode=thumb" \
 			;; \
 		\
 # with-arch-32: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L598
