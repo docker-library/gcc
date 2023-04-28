@@ -6,16 +6,6 @@
 
 FROM buildpack-deps:bookworm
 
-RUN set -ex; \
-	if ! command -v gpg > /dev/null; then \
-		apt-get update; \
-		apt-get install -y --no-install-recommends \
-			gnupg \
-			dirmngr \
-		; \
-		rm -rf /var/lib/apt/lists/*; \
-	fi
-
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
 # 1024D/745C015A 1999-11-09 Gerald Pfeifer <gerald@pfeifer.com>
@@ -34,6 +24,11 @@ ENV GPG_KEYS \
 	D3A93CAD751C2AF4F8C7AD516C35B99309B5FA62
 
 RUN set -ex; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		gnupg \
+	; \
+	rm -rf /var/lib/apt/lists/*; \
 	for key in $GPG_KEYS; do \
 		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
 	done
