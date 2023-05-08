@@ -22,9 +22,9 @@
     "debian": {
       "version": "bullseye"
     },
-    "eol": "2024-02-19",
-    "lastModified": "2022-08-19",
-    "version": "12.2.0"
+    "eol": "2024-11-08",
+    "lastModified": "2023-05-08",
+    "version": "12.3.0"
   },
   "13": {
     "compression": "xz",
