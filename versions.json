@@ -13,9 +13,9 @@
     "debian": {
       "version": "bullseye"
     },
-    "eol": "2023-10-21",
-    "lastModified": "2022-04-21",
-    "version": "11.3.0"
+    "eol": "2024-11-29",
+    "lastModified": "2023-05-29",
+    "version": "11.4.0"
   },
   "12": {
     "compression": "xz",
