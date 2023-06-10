@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye
+FROM buildpack-deps:bookworm
 
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
