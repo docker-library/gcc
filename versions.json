@@ -20,7 +20,7 @@
   "12": {
     "compression": "xz",
     "debian": {
-      "version": "bullseye"
+      "version": "bookworm"
     },
     "eol": "2024-11-08",
     "lastModified": "2023-05-08",
