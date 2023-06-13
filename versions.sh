@@ -3,7 +3,6 @@ set -Eeuo pipefail
 
 # defaultDebianSuite gets auto-declared below
 declare -A debianSuites=(
-	[13]='bookworm' # TODO after bookworm is actually released, remove this special case
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
