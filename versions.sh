@@ -6,8 +6,8 @@ declare -A debianSuites=(
 # the libc created by gcc is too old for a newer Debian
 # $ apt --version
 # apt: /usr/local/lib64/libstdc++.so.6: version `GLIBCXX_3.4.29' not found
-	[10]="bullseye"
-	[9]="bullseye"
+	[10]='bullseye'
+	[9]='bullseye'
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
