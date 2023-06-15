@@ -135,7 +135,9 @@ RUN set -ex; \
 RUN set -ex; \
 # this filename needs to sort higher than all the architecture filenames ("aarch64-...", "armeabi...", etc)
 	{ echo '/usr/local/lib64'; echo '/usr/local/lib'; } > /etc/ld.so.conf.d/000-local-lib.conf; \
-	ldconfig -v
+	ldconfig -v; \
+	# smoke test to make sure the libs from /usr/local don't break Debian
+	apt-get --version
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
 RUN set -ex; \
