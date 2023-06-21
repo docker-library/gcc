@@ -1,9 +1,17 @@
 #!/bin/bash
 set -Eeuo pipefail
 
+# the libc created by gcc might be too old for a newer Debian:
+# https://packages.debian.org/stable/gcc
+# bookworm: 12.2
+# bullseye: 10.2
+# buster: 8.3
+
 # defaultDebianSuite gets auto-declared below
 declare -A debianSuites=(
-# the libc created by gcc is too old for a newer Debian
+# $ convert
+# convert: /usr/local/lib64/libstdc++.so.6: version `GLIBCXX_3.4.30' not found
+	[11]='bullseye'
 # $ apt --version
 # apt: /usr/local/lib64/libstdc++.so.6: version `GLIBCXX_3.4.29' not found
 	[10]='bullseye'

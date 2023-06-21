@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bookworm
+FROM buildpack-deps:bullseye
 
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
@@ -136,8 +136,14 @@ RUN set -ex; \
 # this filename needs to sort higher than all the architecture filenames ("aarch64-...", "armeabi...", etc)
 	{ echo '/usr/local/lib64'; echo '/usr/local/lib'; } > /etc/ld.so.conf.d/000-local-lib.conf; \
 	ldconfig -v; \
-	# smoke test to make sure the libs from /usr/local don't break Debian
-	apt-get --version
+	# the libc created by gcc might be too old for a newer Debian
+	# check that the Debian libstdc++ doesn't have newer requirements than the gcc one
+	bash -Eeuo pipefail -xc ' \
+		deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
+		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
+		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
+		test -z "$diff"; \
+	'
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
 RUN set -ex; \
