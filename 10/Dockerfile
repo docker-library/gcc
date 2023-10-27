@@ -125,7 +125,8 @@ RUN set -ex; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	echo '{"spdxVersion":"SPDX-2.3","SPDXID":"SPDXRef-DOCUMENT","name":"gcc-sbom","packages":[{"name":"gcc","versionInfo":"10.5.0","SPDXID":"SPDXRef-Package--gcc","externalRefs":[{"referenceCategory":"PACKAGE-MANAGER","referenceType":"purl","referenceLocator":"pkg:generic/gcc@10.5.0?os_name=debian&os_version=bullseye"}],"licenseDeclared":"GPL-3.0-or-later"}]}' > /usr/local/gcc.spdx.json;
 
 # gcc installs .so files in /usr/local/lib64 (and /usr/local/lib)...
 RUN set -ex; \

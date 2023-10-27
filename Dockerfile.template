@@ -1,3 +1,4 @@
+{{ include ".template-helper-functions" -}}
 FROM buildpack-deps:{{ .debian.version }}
 
 # https://gcc.gnu.org/mirrors.html
@@ -124,7 +125,20 @@ RUN set -ex; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	echo {{
+		{
+			name: "gcc",
+			version: .version,
+			params: {
+				os_name: "debian",
+				os_version: .debian.version
+			},
+			licenses: [
+				"GPL-3.0-or-later"
+			]
+		} | sbom | tostring | @sh
+	}} > /usr/local/gcc.spdx.json;
 
 # gcc installs .so files in /usr/local/lib64 (and /usr/local/lib)...
 RUN set -ex; \
