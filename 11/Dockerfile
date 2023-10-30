@@ -23,16 +23,6 @@ ENV GPG_KEYS \
 # 4096R/09B5FA62 2020-05-28 Jakub Jelinek <jakub@redhat.com>
 	D3A93CAD751C2AF4F8C7AD516C35B99309B5FA62
 
-RUN set -ex; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		gnupg \
-	; \
-	rm -rf /var/lib/apt/lists/*; \
-	for key in $GPG_KEYS; do \
-		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-	done
-
 # https://gcc.gnu.org/mirrors.html
 ENV GCC_MIRRORS \
 		https://ftpmirror.gnu.org/gcc \
@@ -54,6 +44,7 @@ RUN set -ex; \
 	apt-get install -y --no-install-recommends \
 		dpkg-dev \
 		flex \
+		gnupg \
 	; \
 	rm -r /var/lib/apt/lists/*; \
 	\
@@ -71,7 +62,13 @@ RUN set -ex; \
 	\
 	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz.sig" 'gcc.tar.xz.sig'; \
 	_fetch "gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.xz" 'gcc.tar.xz'; \
+	export GNUPGHOME="$(mktemp -d)"; \
+	for key in $GPG_KEYS; do \
+		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+	done; \
 	gpg --batch --verify gcc.tar.xz.sig gcc.tar.xz; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME"; \
 	mkdir -p /usr/src/gcc; \
 	tar -xf gcc.tar.xz -C /usr/src/gcc --strip-components=1; \
 	rm gcc.tar.xz*; \
