@@ -60,6 +60,7 @@ cat <<-EOH
 Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
              Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
 GitRepo: https://github.com/docker-library/gcc.git
+Builder: buildkit
 EOH
 
 # prints "$2$1$3$1...$N"
