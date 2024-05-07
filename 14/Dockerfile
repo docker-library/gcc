@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye
+FROM buildpack-deps:bookworm
 
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
@@ -33,9 +33,9 @@ ENV GCC_MIRRORS \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
-# Last Modified: 2022-05-27
-ENV GCC_VERSION 9.5.0
-# Docker EOL: 2023-11-27
+# Last Modified: 2024-05-07
+ENV GCC_VERSION 14.1.0
+# Docker EOL: 2025-11-07
 
 RUN set -ex; \
 	\
@@ -100,7 +100,8 @@ RUN set -ex; \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv5te --with-float=soft" \
 			;; \
 		armhf) \
-			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb" \
+			# https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1939379/comments/2
+			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a+fp --with-float=hard --with-mode=thumb" \
 			;; \
 		\
 # with-arch-32: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L598
@@ -137,6 +138,8 @@ RUN set -ex; \
 	bash -Eeuo pipefail -xc ' \
 		deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
 		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
+# https://github.com/docker-library/gcc/pull/103#issuecomment-2099134740 (using "comm" to avoid accidental partial matches / hairy "grep" regex)
+		deb="$(comm -23 <(cat <<<"$deb") <(echo "GLIBC_2.16"))"; \
 		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
 		test -z "$diff"; \
 	'

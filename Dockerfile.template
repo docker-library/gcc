@@ -136,6 +136,10 @@ RUN set -ex; \
 	bash -Eeuo pipefail -xc ' \
 		deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
 		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
+{{ if .debian.version == "bookworm" and (env.version | tonumber) >= 14 then ( -}}
+# https://github.com/docker-library/gcc/pull/103#issuecomment-2099134740 (using "comm" to avoid accidental partial matches / hairy "grep" regex)
+		deb="$(comm -23 <(cat <<<"$deb") <(echo "GLIBC_2.16"))"; \
+{{ ) else "" end -}}
 		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
 		test -z "$diff"; \
 	'
