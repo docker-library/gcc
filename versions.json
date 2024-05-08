@@ -35,13 +35,13 @@
     "lastModified": "2023-07-27",
     "version": "13.2.0"
   },
-  "9": {
+  "14": {
     "compression": "xz",
     "debian": {
-      "version": "bullseye"
+      "version": "bookworm"
     },
-    "eol": "2023-11-27",
-    "lastModified": "2022-05-27",
-    "version": "9.5.0"
+    "eol": "2025-11-07",
+    "lastModified": "2024-05-07",
+    "version": "14.1.0"
   }
 }
