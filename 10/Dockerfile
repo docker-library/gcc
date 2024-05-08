@@ -6,6 +6,14 @@
 
 FROM buildpack-deps:bullseye
 
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+# install abigail-tools so we can use abidiff later to verify that we don't break Debian packages
+		abigail-tools \
+	; \
+	rm -rf /var/lib/apt/lists/*
+
 # https://gcc.gnu.org/mirrors.html
 ENV GPG_KEYS \
 # 1024D/745C015A 1999-11-09 Gerald Pfeifer <gerald@pfeifer.com>
@@ -134,12 +142,10 @@ RUN set -ex; \
 	ldconfig -v; \
 	# the libc created by gcc might be too old for a newer Debian
 	# check that the Debian libstdc++ doesn't have newer requirements than the gcc one
-	bash -Eeuo pipefail -xc ' \
-		deb="$(strings /usr/lib/*/libstdc++.so* | grep "^GLIBC" | sort -u)"; \
-		gcc="$(strings /usr/local/lib*/libstdc++.so | grep "^GLIBC" | sort -u)"; \
-		diff="$(comm -23 <(cat <<<"$deb") <(cat <<<"$gcc"))"; \
-		test -z "$diff"; \
-	'
+	deb="$(readlink -ve /usr/lib/*/libstdc++.so* | head -1)"; \
+	gcc="$(readlink -ve /usr/local/lib*/libstdc++.so | head -1)"; \
+# using LD_PRELOAD to make sure "abidiff" itself doesn't fail with the exact error we're trying to test for 😂😭
+	LD_PRELOAD="$deb" abidiff --no-added-syms "$deb" "$gcc"
 
 # ensure that alternatives are pointing to the new compiler and that old one is no longer used
 RUN set -ex; \
