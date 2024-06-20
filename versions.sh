@@ -34,8 +34,7 @@ debianStable="$(awk <<<"$debianStable" '$1 == "Codename:" { print $2; exit }')"
 [ -n "$debianStable" ]
 defaultDebianSuite="$debianStable"
 
-#packagesUrl='https://ftpmirror.gnu.org/gcc/'
-packagesUrl='https://mirrors.kernel.org/gnu/gcc/' # the actual HTML of the page changes based on which mirror we end up hitting, so let's hit a specific one for now... :'(
+packagesUrl='https://sourceware.org/pub/gcc/releases/?C=M;O=D' # the actual HTML of the page changes based on which mirror we end up hitting, *and* sometimes specific mirrors are missing versions, so let's hit the original canonical host for version scraping
 packages="$(wget -qO- "$packagesUrl")"
 
 # our own "supported" window is 18 months from the most recent release because upstream doesn't have a good guideline, but appears to only release maintenance updates for 2-3 years after the initial release
@@ -50,8 +49,8 @@ eols=()
 dateFormat='%Y-%m-%d'
 
 for version in "${versions[@]}"; do
-	fullVersion="$(grep -E '<a href="(gcc-)?'"$version." <<<"$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
-	lastModified="$(grep -Em1 '<a href="(gcc-)?'"$fullVersion"'/"' <<<"$packages" | awk -F '  +' '{ print $2 }')"
+	fullVersion="$(grep -P '<a href="(gcc-)?\Q'"$version."'\E' <<<"$packages" | sed -r 's!.*<a href="(gcc-)?([^"/]+)/?".*!\2!' | sort -V | tail -1)"
+	lastModified="$(grep -Pm1 '<a href="(gcc-)?\Q'"$fullVersion"'\E/"' <<<"$packages" | grep -oPm1 '(?<![0-9])[0-9]{4}-[0-9]{2}-[0-9]{2}(?![0-9])')"
 	lastModified="$(date -d "$lastModified" +"$dateFormat")"
 
 	lastModifiedTime="$(date +'%s' -d "$lastModified")"

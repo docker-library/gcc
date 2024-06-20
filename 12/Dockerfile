@@ -38,6 +38,8 @@ ENV GCC_MIRRORS \
 		https://bigsearcher.com/mirrors/gcc/releases \
 		http://www.netgull.com/gcc/releases \
 		https://ftpmirror.gnu.org/gcc \
+# "sourceware.org" is the canonical upstream release host (the host of "gcc.gnu.org")
+		https://sourceware.org/pub/gcc/releases \
 # only attempt the origin FTP as a mirror of last resort
 		ftp://ftp.gnu.org/gnu/gcc
 
