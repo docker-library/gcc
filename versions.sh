@@ -8,9 +8,6 @@ set -Eeuo pipefail
 
 # defaultDebianSuite gets auto-declared below
 declare -A debianSuites=(
-# $ convert
-# convert: /usr/local/lib64/libstdc++.so.6: version `GLIBCXX_3.4.30' not found
-	[11]='bullseye'
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"

@@ -1,13 +1,4 @@
 {
-  "11": {
-    "compression": "xz",
-    "debian": {
-      "version": "bullseye"
-    },
-    "eol": "2026-01-19",
-    "lastModified": "2024-07-19",
-    "version": "11.5.0"
-  },
   "12": {
     "compression": "xz",
     "debian": {
