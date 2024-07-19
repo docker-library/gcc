@@ -4,9 +4,9 @@
     "debian": {
       "version": "bullseye"
     },
-    "eol": "2024-11-29",
-    "lastModified": "2023-05-29",
-    "version": "11.4.0"
+    "eol": "2026-01-19",
+    "lastModified": "2024-07-19",
+    "version": "11.5.0"
   },
   "12": {
     "compression": "xz",
