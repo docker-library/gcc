@@ -103,9 +103,9 @@ RUN set -ex; \
 	extraConfigureArgs=''; \
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "$dpkgArch" in \
-# with-arch: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L462-502
-# with-float: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules.defs#L502-512
-# with-mode: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules.defs#L480
+# with-arch: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-13-debian/debian/rules2#L533-573
+# with-float: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-13-debian/debian/rules2#L521-523
+# with-mode: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-13-debian/debian/rules2#L571
 		armel) \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv5te --with-float=soft" \
 			;; \
@@ -114,7 +114,7 @@ RUN set -ex; \
 			extraConfigureArgs="$extraConfigureArgs --with-arch=armv7-a+fp --with-float=hard --with-mode=thumb" \
 			;; \
 		\
-# with-arch-32: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-11-debian/debian/rules2#L598
+# with-arch-32: https://salsa.debian.org/toolchain-team/gcc/-/blob/gcc-13-debian/debian/rules2#L670
 		i386) \
 			extraConfigureArgs="$extraConfigureArgs --with-arch-32=i686"; \
 			;; \
