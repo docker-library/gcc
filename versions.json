@@ -22,8 +22,8 @@
     "debian": {
       "version": "bookworm"
     },
-    "eol": "2025-11-07",
-    "lastModified": "2024-05-07",
-    "version": "14.1.0"
+    "eol": "2026-02-01",
+    "lastModified": "2024-08-01",
+    "version": "14.2.0"
   }
 }
