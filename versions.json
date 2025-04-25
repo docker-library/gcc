@@ -25,5 +25,14 @@
     "eol": "2026-02-01",
     "lastModified": "2024-08-01",
     "version": "14.2.0"
+  },
+  "15": {
+    "compression": "xz",
+    "debian": {
+      "version": "bookworm"
+    },
+    "eol": "2026-10-25",
+    "lastModified": "2025-04-25",
+    "version": "15.1.0"
   }
 }
