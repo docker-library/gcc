@@ -22,9 +22,9 @@
     "debian": {
       "version": "bookworm"
     },
-    "eol": "2026-02-01",
-    "lastModified": "2024-08-01",
-    "version": "14.2.0"
+    "eol": "2026-11-23",
+    "lastModified": "2025-05-23",
+    "version": "14.3.0"
   },
   "15": {
     "compression": "xz",
