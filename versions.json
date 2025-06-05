@@ -13,9 +13,9 @@
     "debian": {
       "version": "bookworm"
     },
-    "eol": "2025-11-21",
-    "lastModified": "2024-05-21",
-    "version": "13.3.0"
+    "eol": "2026-12-05",
+    "lastModified": "2025-06-05",
+    "version": "13.4.0"
   },
   "14": {
     "compression": "xz",
