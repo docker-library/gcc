@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bookworm
+FROM buildpack-deps:trixie
 
 RUN set -eux; \
 	apt-get update; \

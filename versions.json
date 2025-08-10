@@ -29,7 +29,7 @@
   "15": {
     "compression": "xz",
     "debian": {
-      "version": "bookworm"
+      "version": "trixie"
     },
     "eol": "2027-02-08",
     "lastModified": "2025-08-08",
