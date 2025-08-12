@@ -8,6 +8,8 @@ set -Eeuo pipefail
 
 # defaultDebianSuite gets auto-declared below
 declare -A debianSuites=(
+	['12']='bookworm'
+	['13']='bookworm'
 )
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
