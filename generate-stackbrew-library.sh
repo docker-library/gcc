@@ -95,7 +95,8 @@ for version; do
 	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/Dockerfile")"
 	# no i386 for now: https://github.com/docker-library/gcc/issues/38
 	# no mips64le for now: https://github.com/docker-library/gcc/issues/67
-	arches="$(echo " ${parentRepoToArches[$parent]} " | sed -r -e 's/ i386 / /g' -e 's/ mips64le / /g')"
+	# no riscv64 because it takes (way) too long to build
+	arches="$(sed <<<" ${parentRepoToArches[$parent]} " -r -e 's/ i386 / /g' -e 's/ mips64le / /g' -e 's/ riscv64 / /g')"
 
 	echo
 	jq -r '"# Last Modified: " + .[env.version].lastModified' versions.json
