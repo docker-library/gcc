@@ -34,5 +34,14 @@
     "eol": "2027-02-08",
     "lastModified": "2025-08-08",
     "version": "15.2.0"
+  },
+  "16": {
+    "compression": "xz",
+    "debian": {
+      "version": "trixie"
+    },
+    "eol": "2027-10-30",
+    "lastModified": "2026-04-30",
+    "version": "16.1.0"
   }
 }
