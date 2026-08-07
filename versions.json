@@ -40,8 +40,8 @@
     "debian": {
       "version": "trixie"
     },
-    "eol": "2027-10-30",
-    "lastModified": "2026-04-30",
-    "version": "16.1.0"
+    "eol": "2028-02-07",
+    "lastModified": "2026-08-07",
+    "version": "16.2.0"
   }
 }
