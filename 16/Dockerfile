@@ -62,7 +62,9 @@ RUN set -ex; \
 		local fetch="$1"; shift; \
 		local file="$1"; shift; \
 		for mirror in $GCC_MIRRORS; do \
-			if curl -fL "$mirror/$fetch" -o "$file"; then \
+			# add connect-timeout: default 60
+			# https://curl.se/docs/manpage.html#--connect-timeout
+			if curl -fL "$mirror/$fetch" --connect-timeout 30 -o "$file"; then \
 				return 0; \
 			fi; \
 		done; \
@@ -92,7 +94,8 @@ RUN set -ex; \
 	\
 # explicitly update autoconf config.guess and config.sub so they support more arches/libcs
 	for f in config.guess config.sub; do \
-		wget -O "$f" "https://git.savannah.gnu.org/cgit/config.git/plain/$f?id=7d3d27baf8107b630586c962c057e22149653deb"; \
+		# these files are small, so the default 900 second timeout is excessive
+		wget --timeout 30 -O "$f" "https://git.savannah.gnu.org/cgit/config.git/plain/$f?id=7d3d27baf8107b630586c962c057e22149653deb"; \
 # find any more (shallow) copies of the file we grabbed and update them too
 		find -mindepth 2 -name "$f" -exec cp -v "$f" '{}' ';'; \
 	done; \
